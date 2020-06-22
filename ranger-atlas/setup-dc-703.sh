@@ -145,7 +145,7 @@ chmod +r *.keytab
 cd /tmp/masterclass/ranger-atlas/HortoniaMunichSetup
 
 
-kinit -kt /etc/security/keytabs/etl_user.keytab  etl_user/$(hostname -f)@${kdc_realm}
+kinit -kt /etc/security/keytabs/etl_user.keytab  etl_user
 hdfs dfs -mkdir -p /apps/hive/share/udfs/
 hdfs dfs -put /opt/cloudera/parcels/CDH/lib/hive/lib/hive-exec.jar /apps/hive/share/udfs/
 hdfs  dfs -chown -R hive:hadoop  /apps
