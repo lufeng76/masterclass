@@ -2,7 +2,8 @@
 
 #run on CDP-DC master node
 export enable_kerberos=${enable_kerberos:-true}      ## whether kerberos is enabled on cluster
-export atlas_host=${atlas_host:-$(hostname -f)}      ##atlas hostname (if not on current host). Override with your own
+#export atlas_host=${atlas_host:-$(hostname -f)}      ##atlas hostname (if not on current host). Override with your own
+export atlas_host=lufeng-4.gce.cloudera.com
 
 #default settings for cloudcat cluster. You can override for your own setup
 # export ranger_password=${ranger_password:-admin123}  
@@ -11,16 +12,17 @@ export atlas_host=${atlas_host:-$(hostname -f)}      ##atlas hostname (if not on
 # export cluster_name=${cluster_name:-cm}
 
 #default settings for AMI cluster
-export ranger_password=${ranger_password:-BadPass#1}
-export atlas_pass=${atlas_pass:-BadPass#1}
-export kdc_realm=${kdc_realm:-CLOUDERA.COM}
+export ranger_password=${ranger_password:-fl186001}
+export atlas_pass=${atlas_pass:-fl186001}
+export kdc_realm=${kdc_realm:-GCE.CLOUDERA.COM}
 #export cluster_name=${cluster_name:-SingleNodeCluster}
 export import_hue_queries=${import_hue_queries:-true}
 export host=$(hostname -f)
 
 yum install -y git jq nc
 cd /tmp
-git clone https://github.com/abajwa-hw/masterclass  
+#git clone https://github.com/abajwa-hw/masterclass  
+git clone https://github.com/lufeng76/masterclass  
 cd /tmp/masterclass/ranger-atlas/HortoniaMunichSetup
 chmod +x *.sh
 ./04-create-os-users.sh  
@@ -33,7 +35,9 @@ sleep 60
 
 
 ranger_curl="curl -u admin:${ranger_password}"
-ranger_url="http://localhost:6080/service"
+#ranger_url="http://localhost:6080/service"
+ranger_url="http://lufeng-4.gce.cloudera.com:6080/service"
+
 
 
 ${ranger_curl} -X POST -H "Content-Type: application/json" -H "Accept: application/json" ${ranger_url}/public/v2/api/roles  -d @- <<EOF
@@ -116,15 +120,27 @@ kadmin.local -q "addprinc -randkey etl_user/$(hostname -f)@${kdc_realm}"
 echo "Creating user keytabs..."
 mkdir -p /etc/security/keytabs
 cd /etc/security/keytabs
-kadmin.local -q "xst -k joe_analyst.keytab joe_analyst/$(hostname -f)@${kdc_realm}"    
-kadmin.local -q "xst -k log_monitor.keytab log_monitor/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k diane_csr.keytab diane_csr/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k jermy_contractor.keytab jermy_contractor/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k mark_bizdev.keytab mark_bizdev/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k john_finance.keytab john_finance/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k ivanna_eu_hr.keytab ivanna_eu_hr/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k kate_hr.keytab kate_hr/$(hostname -f)@${kdc_realm}"
-kadmin.local -q "xst -k etl_user.keytab etl_user/$(hostname -f)@${kdc_realm}" 
+#kadmin.local -q "xst -k joe_analyst.keytab joe_analyst/$(hostname -f)@${kdc_realm}"    
+#kadmin.local -q "xst -k log_monitor.keytab log_monitor/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k diane_csr.keytab diane_csr/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k jermy_contractor.keytab jermy_contractor/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k mark_bizdev.keytab mark_bizdev/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k john_finance.keytab john_finance/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k ivanna_eu_hr.keytab ivanna_eu_hr/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k kate_hr.keytab kate_hr/$(hostname -f)@${kdc_realm}"
+#kadmin.local -q "xst -k etl_user.keytab etl_user/$(hostname -f)@${kdc_realm}" 
+
+ipa-getkeytab -p joe_analyst -k joe_analyst.keytab
+ipa-getkeytab -p log_monitor -k log_monitor.keytab
+ipa-getkeytab -p diane_csr -k diane_csr.keytab
+ipa-getkeytab -p jeremy_contractor -k jeremy_contractor.keytab
+ipa-getkeytab -p mark_bizdev -k mark_bizdev.keytab
+ipa-getkeytab -p john_finance -k john_finance.keytab
+ipa-getkeytab -p ivanna_eu_hr -k ivanna_eu_hr.keytab
+ipa-getkeytab -p kate_hr -k kate_hr.keytab
+ipa-getkeytab -p etl_user -k etl_user.keytab
+
+
 chmod +r *.keytab
 cd /tmp/masterclass/ranger-atlas/HortoniaMunichSetup
 
