@@ -29,7 +29,7 @@ ipa group-add-member finance --users=john_finance
 ipa user-add mark_bizdev --first=mark --last=bizdev --password
 ipa group-add-member business_dev --users=mark_bizdev
 
-ipa user-add jeremy_contractor  --password
+ipa user-add jeremy_contractor --first=jeremy --last=contractor --password
 ipa group-add-member contractor --users=jeremy_contractor
 
 ipa user-add diane_csr --first=diane --last=csr --password
