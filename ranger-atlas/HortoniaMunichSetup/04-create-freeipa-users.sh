@@ -23,23 +23,23 @@ ipa group-add intern --desc="intern"
 #useradd -g etl etl_user
 #useradd -g intern scott_intern
 
-ipa user-add john_finance  --password
+ipa user-add john_finance  --first=john --last=finance --password
 ipa group-add-member finance --users=john_finance
 
-ipa user-add mark_bizdev  --password
+ipa user-add mark_bizdev --first=mark --last=bizdev --password
 ipa group-add-member business_dev --users=mark_bizdev
 
 ipa user-add jeremy_contractor  --password
 ipa group-add-member contractor --users=jeremy_contractor
 
-ipa user-add diane_csr  --password
+ipa user-add diane_csr --first=diane --last=csr --password
 ipa group-add-member csr --users=diane_csr
 
-ipa user-add log_monitor  --password
-ipa user-add etl_user  --password
+ipa user-add log_monitor  --first=log --last=monitor --password
+ipa user-add etl_user  --first=etl --last=user --password
 ipa group-add-member etl --users=log_monitor,etl_user
 
-ipa user-add scott_intern  --password
+ipa user-add scott_intern --first=scott --last=intern --password
 ipa group-add-member intern --users=scott_intern
 
 
@@ -62,15 +62,15 @@ ipa group-add dpo --desc="dpo"
 #useradd -g hr ivanna_eu_hr
 #useradd -g dpo michelle_dpo
 
-ipa user-add joe_analyst  --password
+ipa user-add joe_analyst  --first=joe --last=analyst --password
 ipa group-add-member analyst --users=joe_analyst
 
-ipa user-add kate_hr  --password
-ipa user-add sasha_eu_hr  --password
-ipa user-add ivanna_eu_hr  --password
+ipa user-add kate_hr --first=kate --last=hr --password
+ipa user-add sasha_eu_hr --first=sasha --last=hr --password
+ipa user-add ivanna_eu_hr --first=ivanna --last=hr --password
 ipa group-add-member hr --users=kate_hr,sasha_eu_hr,ivanna_eu_hr
 
-ipa user-add michelle_dpo  --password
+ipa user-add michelle_dpo  --first=michelle --last=dpo --password
 ipa group-add-member dpo --users=michelle_dpo
 
 
