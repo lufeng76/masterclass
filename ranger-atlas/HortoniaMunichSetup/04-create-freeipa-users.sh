@@ -5,6 +5,8 @@
 #groupadd etl
 #groupadd intern
 
+kinit admin
+
 ipa group-add finance --desc="finance"
 ipa group-add business_dev --desc="business_dev"
 ipa group-add contractor --desc="contractor"
