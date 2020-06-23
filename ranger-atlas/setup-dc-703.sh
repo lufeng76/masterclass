@@ -178,37 +178,37 @@ cd ../Scripts/interpreters/
 echo "In Zeppelin, create shell and jdbc interpreter settings via API.."
 
 #login to zeppelin and grab cookie 
-cookie=$( curl -i --data "userName=etl_user&password=BadPass#1" -X POST http://$(hostname -f):8885/api/login | grep HttpOnly  | tail -1  )
+cookie=$( curl -i --data "userName=etl_user&password=cloudera" -X POST http://lufeng-4.gce.cloudera.com:8885/api/login | grep HttpOnly  | tail -1  )
 echo "$cookie" > cookie.txt
 
 #Create shell interpreter setting
-curl -b ./cookie.txt -X POST http://$(hostname -f):8885/api/interpreter/setting -d @./shell.json
+curl -b ./cookie.txt -X POST http://lufeng-4.gce.cloudera.com:8885/api/interpreter/setting -d @./shell.json
 
 #Create jdbc interpreter setting
 hivejar=$(ls /opt/cloudera/parcels/CDH/jars/hive-jdbc-3*-standalone.jar)
 sed -i.bak "s|__hivejar__|${hivejar}|g" ./jdbc.json
-curl -b ./cookie.txt -X POST http://$(hostname -f):8885/api/interpreter/setting -d @./jdbc.json
+curl -b ./cookie.txt -X POST http://lufeng-4.gce.cloudera.com:8885/api/interpreter/setting -d @./jdbc.json
 
 #list all interpreters settings - jdbc and sh should now be added
-curl -b ./cookie.txt http://$(hostname -f):8885/api/interpreter/setting | python -m json.tool | grep "id"
+curl -b ./cookie.txt http://lufeng-4.gce.cloudera.com:8885/api/interpreter/setting | python -m json.tool | grep "id"
 
 
 #import zeppelin notebooks
 cd /var/lib/zeppelin/notebook
 mkdir 2EKX5F5MF
-cp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Security _ WorldWideBank _ Joe-Analyst.json"  ./2EKX5F5MF/note.json
+scp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Security _ WorldWideBank _ Joe-Analyst.json"  lufeng-4.gce.cloudera.com:/var/lib/zeppelin/notebook/2EKX5F5MF/note.json
 
 mkdir 2EMPR5K29
-cp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Security _ WorldWideBank _ Ivanna EU HR.json" ./2EMPR5K29/note.json
+scp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Security _ WorldWideBank _ Ivanna EU HR.json" lufeng-4.gce.cloudera.com:/var/lib/zeppelin/notebook/2EMPR5K29/note.json
 
 mkdir 2EKHXD4H3
-cp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Security _ WorldWideBank _ etl_user.json" ./2EKHXD4H3/note.json
+scp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Security _ WorldWideBank _ etl_user.json" lufeng-4.gce.cloudera.com:/var/lib/zeppelin/notebook/2EKHXD4H3/note.json
 
 mkdir 2EZM9PAXV
-cp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Hive ACID.json" ./2EZM9PAXV/note.json
+scp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Hive ACID.json" lufeng-4.gce.cloudera.com:/var/lib/zeppelin/notebook/2EZM9PAXV/note.json
 
 mkdir 2EXWA1114
-cp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Hive Merge.json" ./2EXWA1114/note.json
+scp "/tmp/masterclass/ranger-atlas/Notebooks-CDP/Demos _ Hive Merge.json" lufeng-4.gce.cloudera.com:/var/lib/zeppelin/notebook/2EXWA1114/note.json
 
 
 chown -R  zeppelin:zeppelin /var/lib/zeppelin/notebook 
